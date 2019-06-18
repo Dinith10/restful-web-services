@@ -6,12 +6,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+
+
 @Component
 public class UserDaoService {
 
     private static List<User> users = new ArrayList<>();
 
-    private static int usersCount = users.size();
+    private static int usersCount ;
 
 
     static {
@@ -21,8 +23,11 @@ public class UserDaoService {
         users.add(new User(2, "Eve", new Date()));
         users.add(new User(3, "Jack", new Date()));
 
+        usersCount = users.size();
 
     }
+
+
 
     public List<User> findAll(){
 
