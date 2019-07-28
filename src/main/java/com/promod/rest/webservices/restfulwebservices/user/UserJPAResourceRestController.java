@@ -1,48 +1,55 @@
 package com.promod.rest.webservices.restfulwebservices.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.server.mvc.ControllerLinkBuilder;
-import org.springframework.hateoas.server.mvc.ControllerLinkRelationProvider;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-public class UserResourceRestController {
+public class UserJPAResourceRestController {
 
     @Autowired
     private UserDaoService service;
 
-    @GetMapping( value = "/users" )
-    public List<User> retriveAllUsers(){
+    @Autowired
+    private UserRepository userRepository;
 
-        return service.findAll();
+
+
+    @GetMapping( value = "/jpa/users" )
+    public List<User> retriveAllUsers(){ System.out.println("AAAAAAAAAAAA");
+
+        return userRepository.findAll();
     }
 
- // retriveUser( int id )
-    @GetMapping( value = "/users/{ides}" )
-    public User reetriveUser ( @PathVariable(value = "ides" ) int id ) throws Throwable {
+// // retriveUser( int id )
+//    @GetMapping( value = "/jpa/users/{ides}" )
+//    public Resource reetriveUser (@PathVariable(value = "ides" ) int id ) throws Throwable {
+//
+//         Optional<User> user = userRepository.findById(id);
+//
+//
+//         if( !user.isPresent() ){
+//
+//             throw new UserNotFoundException("id- mns "+id);
+//
+//         }
+//
+//
+//
+//         Resource  resource = new Resource(user.get());
+//
+//        return resource;
+//
+//
+//    }
 
-         User user = service.findOne(id);
-
-
-         if(user == null ){
-
-             throw new UserNotFoundException("id- mns "+id);
-
-         }
-
-
-        return user;
-
-    }
-
-    @PostMapping("/users")
+    @PostMapping("/jpa/users")
     public ResponseEntity<Object> createUser( @Valid @RequestBody User user){
 
       User saveUser =  service.save(user);
@@ -54,17 +61,12 @@ public class UserResourceRestController {
 
     }
 
-    @DeleteMapping( value = "/users/{ides}" )
-    public User deleteUser ( @PathVariable(value = "ides" ) int id ) throws Throwable {
+    @DeleteMapping( value = "/jpa/users/{ides}" )
+    public void deleteUser ( @PathVariable(value = "ides" ) int id ) throws Throwable {
 
-        User user = service.deleteById(id);
+      userRepository.deleteById(id);
 
 
-        if(user == null ){
-
-            throw new UserNotFoundException("id- mns "+id);
-
-        }
 
 
 
@@ -75,13 +77,26 @@ public class UserResourceRestController {
 
 
 
-        return user;
+
+    }
+
+    @GetMapping("/jpa/users/{id}/posts")
+    public List<Post> retriveUser(@PathVariable("id") int ides ){
+
+        Optional<User> userOptional = userRepository.findById(ides);
+
+        if( !userOptional.isPresent() ){
+
+            throw new UserNotFoundException("id-"+ides);    }
+
+
+        return userOptional.get().getPost();
 
     }
 
     // HATEOS
 
-//    @GetMapping( value = "/users/{ides}" )
+//    @GetMapping( value = "/jpa/users/{ides}" )
 //    public Resource<User> reetriveUser ( @PathVariable(value = "ides" ) int id ) throws Throwable {
 //
 //        User user = service.findOne(id);

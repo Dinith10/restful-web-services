@@ -13,10 +13,18 @@ public class HelloWorldBean {
     }
 
     public String getMessage() {
+
+        System.out.println("getMessage " + this.message);
+
+
         return message;
     }
 
     public void setMessage(String message) {
+
+        System.out.println("setMessage " + message);
+
+
         this.message = message;
     }
 
