@@ -37,7 +37,7 @@ public class User {
     }
 
 
-    public User(int id, String name, Date birthDay) {
+    public User( int id, String name, Date birthDay ) {
         this.id = id;
         this.name = name;
         this.birthDay = birthDay;
